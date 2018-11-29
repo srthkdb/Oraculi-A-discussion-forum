@@ -1,0 +1,34 @@
+{%extends 'home/base.html'%}
+{% block title %}Oraculi{%endblock%}
+{% block add_link %}{% url 'home:subject-add' %}{%endblock%}
+{% block add %}Add Subject{%endblock%}
+{% block add_icon %}glyphicon glyphicon-book{%endblock%}
+{% block add_link-i %}{% url 'home:discussion-add-index' %}{%endblock%}
+{% block add-i %}Ask Question{%endblock%}
+{% block body %}
+
+<!--credits: webpage template used from newboston django tutorials-->
+
+<div class="row">
+            {% if error_message %}
+                <center><p><strong>{{ error_message }}</strong></p></center>
+            {% endif %}
+            {% for subject in allSubjects %}
+                <div class="col-sm-4 col-lg-4">
+                    <div class="thumbnail">
+                        <a href="{% url 'home:subject_details' subject.id %}">
+                            <img src="{{ subject.subjectLogo.url }}" class="img-responsive" alt="{{ subject.subjectName }}" width="500" height="600">
+                        </a>
+                        <div style="text-align:center;" class="caption" >
+                            <h2 style="text-align:center;">{{ subject.subjectName }}</h2>
+
+                            <!-- View Details -->
+                            <a href="{% url 'home:subject_details' subject.id %}" class="btn btn-primary btn" role="button">Discussions</a>
+                            <a href="{% url 'home:folders' subject.id %}" class="btn btn-primary btn" role="button">File Sharing</a>
+                        </div>
+                    </div>
+                </div>
+    {% endfor %}
+</div>
+
+{%endblock%}

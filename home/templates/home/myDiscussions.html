@@ -1,0 +1,72 @@
+{%extends 'home/base.html'%}
+{% block title %}My Discussions{%endblock%}
+{% block add_link-i %}{% url 'home:discussion-add-index' %}{%endblock%}
+{% block add-i %}Ask Question{%endblock%}
+<!--block codes written below is to comment a column from navbar(the second + symbol)-->
+{% block comment11 %}<!{%endblock%}
+{% block comment21 %}>{%endblock%}
+{% block body %}
+
+<!--credits: webpage template used from newboston django tutorials-->
+
+<div class="container-fluid songs-container">
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+
+            <div class="panel panel-default">
+                <div class="panel-body">
+
+                    <h3>{{request.user}}'s Discussions</h3>
+
+                    {% if error_message %}
+                        <p><strong>{{ error_message }}</strong></p>
+                    {% endif %}
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Subject</th>
+                                <th>Question</th>
+                                <th>Comments</th>
+                                <th>Expand</th>
+                            </tr>
+                        </thead>
+
+                        {%for d in discussion %}
+                        <tbody>
+                            <tr>
+                                <th>{{ forloop.counter }}.</th>
+                                <th><a href="{%url 'home:subject_details' d.subject.id%}">{{d.subject}}</a></th>
+                                <td>{{d.question}}</td>
+                                <td>{{d.comments_set.count}}</td>
+                                <td>
+                                    <a  href="{% url 'home:discussion_details' d.id d.subject.id %}">
+                                        <button  style="float: left" type="button" class="btn btn-success btn-xs">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                </a>
+                                <form action="{%url 'home:discussion-delete' d.subject.id d.id %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="discussion_id" value="{{ discussion.id }}" />
+                                        <button  style="float: right" type="submit" class="btn btn-default btn-xs">
+                                            <span class="glyphicon glyphicon-trash"></span>
+                                        </button>
+                                </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

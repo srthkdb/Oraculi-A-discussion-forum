@@ -1,0 +1,75 @@
+{%extends 'home/base.html'%}
+{% block title %}My Discussions{%endblock%}
+{% block add_link %}{% url 'home:create_file' folder.id%}{%endblock%}
+{% block add_icon %}glyphicon glyphicon-file{%endblock%}
+{% block add %}Add File{%endblock%}
+{% block add_link-i %}{% url 'home:discussion-add-index' %}{%endblock%}
+{% block add-i %}Ask Question{%endblock%}
+
+{% block body %}
+
+<!--credits: webpage template used from newboston django tutorials-->
+
+<div class="container-fluid songs-container">
+
+    <div class="row">
+        <div class="col-sm-12 col-md-12">
+
+            <div class="panel panel-default">
+                <div class="panel-body">
+
+                    <h3>{{folder.name}}</h3>
+
+                    {% if error_message %}
+                        <p><strong>{{ error_message }}</strong></p>
+                    {% endif %}
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Sr</th>
+                                <th>File Title</th>
+                                <th>Description</th>
+                                <th>User</th>
+                                <th>File Type</th>
+                                <th>Download</th>
+                            </tr>
+                        </thead>
+
+                        {%for file in folder.file_set.all %}
+                        <tbody>
+                            <tr>
+                                <th>{{ forloop.counter}}.</th>
+                                <th><a href="{{file.name}}">{{file.title}}</a></th>
+                                <td>{{file.description}}</td>
+                                <td>{{file.file_user}}</td>
+                                <td>{{ file.type }}</td>
+                                <td>
+                                    <a  href="{{file.name}}">
+                                        <button  style="float: left" type="button" class="btn btn-success btn-xs">
+                                            <span class="glyphicon glyphicon-download-alt"></span>
+                                        </button>
+                                </a>
+                                <form action="{%url 'home:delete_file' folder.id file.id%}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="file_id" value="{{ file.id }}" />
+                                        <button  style="float: right" type="submit" class="btn btn-default btn-xs">
+                                            <span class="glyphicon glyphicon-trash"></span>
+                                        </button>
+                                </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

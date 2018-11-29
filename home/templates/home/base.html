@@ -1,0 +1,89 @@
+<!--this html file is used by all other html files of the website and contains navbar-->
+<!--this webpage template used from newboston django tutorials-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Oraculi{%endblock%}</title>
+    <!-- loads static files -->
+    {%load staticfiles%}
+    <link rel="shortcut icon" type="image/png" href="{%  static 'favicon.ico' %}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+     <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'home/style.css' %}" />
+</head>
+<body>
+        <!-- navbar -->
+        <nav class="navbar navbar-default">
+        <div class="container-fluid">
+
+            <!--logo + buttons-->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toogle="collapse" data-target="#TopNavBar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{%url 'home:index'%}">Oraculi</a>
+            </div>
+
+            <!-- Items -->
+            <div class="collapse navbar-collapse" id="topNavBar">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="{%url 'home:index'%}">Subjects
+                            <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                              {% for subject in allSubjects %}
+                                <li><a href="{% url 'home:subject_details' subject.id %}">{{subject.subjectName}}</a> </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    </li>
+
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="">
+                        <a href="{% block add_link %}{%endblock%}">
+                            <span class="{% block add_icon %}{%endblock%}" aria-hidden="true"></span>&nbsp; {% block add %}{%endblock%}
+                        </a>
+                    </li>
+                    <li class="">
+                        <a href="{% url 'home:my_discussions' %}">
+                            <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>&nbsp; My Discussions
+                        </a>
+                    </li>
+                    <font style="font-size:0px">{% block comment11 %}{%endblock%}--</font>
+
+                    <font style="font-size:0px">--{% block comment21 %}{%endblock%}</font>
+                    <font style="font-size:0px">{% block comment1 %}{%endblock%}--</font>
+                    <li class="">
+                        <a href="{% block add_link-i %}{%endblock%}">
+                            <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>&nbsp; {% block add-i %}{%endblock%}
+                        </a>
+                    </li>
+                    <font style="font-size:0px">--{% block comment2 %}{%endblock%}</font>
+                    <li class="">
+                        <a href="{% url 'home:logout_user' %}">
+                            <span class="glyphicon glyphicon-off" aria-hidden="true"></span>&nbsp;{{request.user.username}}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+
+    <!-- Block of html code for the rest of the page under navbar -->
+{% block body %}
+{%endblock%}
+
+</body>
+</html>

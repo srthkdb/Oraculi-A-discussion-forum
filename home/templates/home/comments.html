@@ -1,0 +1,119 @@
+{%extends 'home/base.html'%}
+{% block title %}{{discussion.title}}{%endblock%}
+{% block add_link %}{% url 'home:comments-add' subject.id discussion.id %}{%endblock%}
+{% block add %}Add Comment{%endblock%}
+{% block add_icon %}glyphicon glyphicon-plus{%endblock%}
+{% block add_link-i %}{% url 'home:discussion-add-index' %}{%endblock%}
+{% block add-i %}Ask Question{%endblock%}
+{% block body %}
+
+<div class="container-fluid songs-container">
+
+    <div class="row">
+
+        <!-- Left Album Info -->
+        <div class="col-sm-4 col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h3>All Questions</h3>
+                    {%if error_message%}
+                    <p><strong>{{error_message}}</strong></p> <!-- error_message is a variable -->
+                    {%endif%}
+                    <ol>
+                        {%for discussion in subject.discussion_set.all %}
+                            <li>
+                                <p><a href="{% url 'home:discussion_details' discussion.id subject.id %}">{{discussion.title}}</a></p>
+                            </li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Song Info -->
+        <div class="col-sm-8 col-md-9">
+
+            <ul class="nav nav-pills" style="margin-bottom: 10px;">
+                <li role="presentation" class="active"><a href="{% url 'home:subject_details' subject.id %}">View All</a></li>
+                <!--<li role="presentation"><a href="{% url 'home:discussion-add' subject.id %}"><font color="white">Ask</font></a></li>-->
+                <li role="presentation">
+                    <a href="{%url 'home:comments-add' subject.id discussion.id%}">
+                        <button type="button" class="btn btn-success btn-xs">
+                            <span class="glyphicon glyphicon-plus"></span>&nbsp; Add comment
+                        </button>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="panel panel-default">
+                <div class="panel-body">
+
+                    <h3>All Comments</h3>
+
+                    {% if error_message %}
+                        <p><strong>{{ error_message }}</strong></p>
+                    {% endif %}
+
+                    <table class="table">
+
+
+                        <thead>
+                        <tr>
+                            <th>Q. {{discussion.question}}<p><i>(By: {%if discussion.anonymous%}
+                                anonymous
+                                {%else%}
+                                {{discussion.user}}
+                                {%endif%})</i></p></th>
+                            {% if discussion.picture %}
+                            <img src="{{ discussion.picture.url }}" class="img-responsive" alt="No picture" width="500" height="600">
+                            {% endif %}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {%if not comment.id%}
+                        <tr>
+                            <td>
+                                <h4><centre>Comments:</centre></h4>
+                            </td>
+                        </tr>
+                        {%endif%}
+                        {% for comment in discussion.comments_set.all %}
+                            <tr>
+                                <td>
+                                    <p>{{comment.answer}}</p>
+                                    {% if comment.image %}
+                                    <img src="{{ comment.image.url }}" class="img-responsive" alt="no image" width="500" height="600">
+                                    {% endif %}
+                                    <p><h6><i><b>By:
+                                    {%if comment.anonymous%}
+                                    anonymous
+                                    {%else%}
+                                    {{comment.user_comment}}
+                                    {%endif%} </b></i></h6></p>
+                                </td>
+                                <td>
+                                    <form action="{%url 'home:comment-delete' subject.id discussion.id comment.id %}" method="post" style="display: inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="comment_id" value="{{ comment.id }}" />
+                                        <button type="submit" class="btn btn-default btn-sm">
+                                            <span class="glyphicon glyphicon-trash"></span>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

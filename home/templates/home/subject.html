@@ -1,0 +1,107 @@
+{%extends 'home/base.html'%}
+{% block title %}{{subject.subjectName}}{%endblock%}
+{% block add_link %}{% url 'home:discussion-add' subject.id %}{%endblock%}
+{% block add_icon %}glyphicon glyphicon-question-sign{%endblock%}
+{% block add %}Ask question{%endblock%}
+<!--block codes written below is to comment a column from navbar(the second + symbol)-->
+{% block comment1 %}<!{%endblock%}
+{% block comment2 %}>{%endblock%}
+{% block body %}
+
+<!--credits: webpage template used from newboston django tutorials-->
+
+<div class="container-fluid songs-container">
+
+    <div class="row">
+
+        <!-- Left Album Info -->
+        <div class="col-sm-4 col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <a href="{% url 'home:subject_details' subject.id %}">
+                        {% if subject.subjectLogo %}
+                            <img src="{{ subject.subjectLogo.url }}" class="img-responsive">
+                        {% else %}
+                            <h3>No image to display</h3>
+                        {% endif %}
+                    </a>
+                    <h1>{{subject.subjectName}}</h1>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Song Info -->
+        <div class="col-sm-8 col-md-9">
+
+            <ul class="nav nav-pills" style="margin-bottom: 10px;">
+                <li role="presentation" class="active"><a href="{% url 'home:discussion-add' subject.id %}">Ask</a></li>
+                <li role="presentation" ><a href="{% url 'home:folders' subject.id %}"><font color="white">Enter File Sharing Centre</font></a></li>
+            </ul>
+
+            <div class="panel panel-default">
+                <div class="panel-body">
+
+                    <h3 style="text-align:center;"><b>All Discussions</b></h3>
+
+                    {% if error_message %}
+                        <p><strong>{{ error_message }}</strong></p>
+                    {% endif %}
+
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>Title</th>
+                            <th>Question</th>
+                            <th>User</th>
+                            <th>Comments</th>
+                            <th>Options</th>
+                        </tr>
+                        </thead>
+
+                        {%for discussion in subject.discussion_set.all %}
+                        <tbody>
+                        <tr>
+                            <th>{{ forloop.counter }}.</th>
+                            <th><a  href="{% url 'home:discussion_details' discussion.id subject.id %}">{{discussion.title}}</a></th>
+                            <td>{{discussion.question}}</td>
+                            <td>
+                                {%if discussion.anonymous%}
+                                anonymous
+                                {%else%}
+                                {{discussion.user}}
+                                {%endif%}
+                            </td>
+                            <td>{{discussion.comments_set.count}}</td>
+                            <td>
+                                <!-- expand discussion -->
+                                <a  href="{% url 'home:discussion_details' discussion.id subject.id %}">
+                                        <button  style="float: left" type="button" class="btn btn-success btn-xs">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                </a>
+                                <!-- delete discussion -->
+                                <form action="{%url 'home:discussion-delete' subject.id discussion.id %}" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="discussion_id" value="{{ discussion.id }}" />
+                                        <button  style="float: right" type="submit" class="btn btn-default btn-xs">
+                                            <span class="glyphicon glyphicon-trash"></span>
+                                        </button>
+                                </form>
+                            </td>
+
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

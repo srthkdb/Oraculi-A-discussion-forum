@@ -1,0 +1,17 @@
+/*this file is css file used by all the templates(html files) of Oraculi*/
+body{
+    background: white url("images/background.jpg");
+
+}
+/*navbar by default has curved edges so removing those*/
+.navbar{
+    border-radius: 0;
+}
+/*Oraculi is written in cursive*/
+.navbar-brand{
+    font-family: cursive;
+}
+
+.container-fluid{
+    padding: 0px;
+}
