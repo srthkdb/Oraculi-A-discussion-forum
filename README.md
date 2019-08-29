@@ -1,8 +1,4 @@
 # Oraculi-A-discussion-forum
-Advanced track project. A Django based dynamic website made to serve as a discussion forum and file sharing centre for IITK students
+Course project, ESC101a (Fundamentals of computing). A Django based dynamic website made to serve as a discussion forum and file sharing centre for students
+Some features of the project are file-share for the discussion forum, anonymous posts, image attachment within posts, keeping track of activity level of a discussion, admin login and allowing owners of a post/file to delete the same.
 
-To host the website:
-1. Install Django on your system.
-2. Open the folder of website in terminal.
-3. Type: python manage.py runserver
-4. Open the ip address shown in terminal.
